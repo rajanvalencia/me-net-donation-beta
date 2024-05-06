@@ -7,7 +7,8 @@ export async function POST(req:NextRequest , res : NextResponse) {
   
   const customer = await stripe.customers.create({
     name : "Bishwas" , 
-    email : "koiralabishwas257@gmail.com"
+    email : "koiralabishwas257@gmail.com",
+    address : { country : "jp" , city : "神奈川県" , }
   })
 
   return NextResponse.json(customer)
