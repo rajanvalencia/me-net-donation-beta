@@ -52,7 +52,22 @@ export async function POST(req: NextRequest, res: NextResponse) {
   // save the created priceID here
   const priceID = createdAmount.id
 
+  //
+  const creteInvoiceItems = stripe.invoiceItems.create({
+    customer : customerID,
+    price : priceID
+  })
+  
+  // create invoice 
+  const createInvoice = stripe.invoices.create({
+    customer : customerID,
+    pending_invoice_items_behavior : "include"
+    
+  })
+  
 
 
-  return NextResponse.json({ newCustomer, createdCustomer , customerID , donationAmount , createdAmount , priceID });
+
+
+  return NextResponse.json({ newCustomer, createdCustomer , customerID , donationAmount , createdAmount , priceID , createInvoice });
 }
