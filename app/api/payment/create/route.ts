@@ -44,13 +44,29 @@ export async function POST(req: NextRequest, res: NextResponse) {
   const donationAmount =  await stripe.prices.create({
     product : body.product_id,
     currency : 'jpy',
+    custom_unit_amount : {
+      enabled : true
+    },
     unit_amount : body.price,
   })
 
-  const createdAmount = await stripe.prices.retrieve(donationAmount.id)
+  const createdPrice = await stripe.prices.retrieve(donationAmount.id)
   
   // save the created priceID here
-  const priceID = createdAmount.id
+  const priceID = createdPrice.id
+
+  const session = await stripe.checkout.sessions.create({
+    cancel_url : "www.yahoo.com",
+    line_items : [
+      {
+        price : priceID,
+        quantity : 1
+      },
+
+    ],
+    mode : "payment",
+    success_url : "www.google.com"
+  })
 
   //
   const creteInvoiceItems = stripe.invoiceItems.create({
@@ -61,13 +77,14 @@ export async function POST(req: NextRequest, res: NextResponse) {
   // create invoice 
   const createInvoice = stripe.invoices.create({
     customer : customerID,
-    pending_invoice_items_behavior : "include"
-    
+    pending_invoice_items_behavior : "include",
   })
+
+
   
 
 
 
 
-  return NextResponse.json({ newCustomer, createdCustomer , customerID , donationAmount , createdAmount , priceID , createInvoice });
+  return NextResponse.json({ newCustomer, createdCustomer , customerID , donationAmount , createdPrice , priceID , createInvoice });
 }
