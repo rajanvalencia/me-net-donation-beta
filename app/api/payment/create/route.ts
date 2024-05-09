@@ -21,30 +21,38 @@ export async function POST(req: NextRequest) {
     product_id: "prod_Q2GxSqbpfzdba4",
     price: 9999,
   };
-
+  // destructuring the body
   const { customer, product_id, price } = body;
 
+  // var to return response 
   let response: Record<string, string | null> = { client_secret: null, paymentIntentId: null };
 
   try {
-    const { id: customerId } = await stripe.customers.create(customer);
 
+    // create customer returns customerId
+    const { id: customerId } = await stripe.customers.create(customer);
+    // create the given price => returns priceId
     const { id: priceId } = await stripe.prices.create({
       product: product_id,
       currency: "jpy",
+      // this price is from body =>i.e body.price
       unit_amount: price,
     });
-
+    // create invoice  => returns invoiceId
     const { id: invoiceId } = await stripe.invoices.create({ customer: customerId });
 
+    // create invoice item  => no any returns
+    // 請求書に詳細内容を書き込む感覚
     await stripe.invoiceItems.create({
-      customer: customerId,
-      price: priceId,
       invoice: invoiceId,
+      customer: customerId,
+      price: priceId
     });
 
+    // create an payment intent 
     const { payment_intent: paymentIntentId } = await stripe.invoices.finalizeInvoice(invoiceId);
 
+    // get client secret from payment intent
     if (typeof paymentIntentId === "string") {
       const { client_secret } = await stripe.paymentIntents.retrieve(paymentIntentId);
       response = { client_secret, paymentIntentId };
