@@ -1,26 +1,44 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
+import {number, Schema, z} from "zod"
+
+const addressSchema = z.object({
+  country : z.string(),
+  postal_code : z.string(),
+  city : z.string(),
+  line1 : z.string(),
+  line2 : z.string()
+})
+
+const customerSchema = z.object({
+  name : z.string(),
+  email : z.string().email(),
+  phone : z.string().min(11).max(11),
+  address : addressSchema
+})
+
+const bodySchema = z.object({
+  customer : customerSchema,
+  product_id : z.string(),
+  price : z.number()
+})
+
+type Body = z.infer<typeof bodySchema>
+
+
+
 
 // Assuming the Stripe instance is initialized with your secret key elsewhere
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string , {apiVersion : "2024-04-10"});
 
 export async function POST(req: NextRequest) {
-  const body = {
-    customer: {
-      name: "Bishwas",
-      email: "koiralabishwas257@gmail.com",
-      phone: "080-3511-8306",
-      address: {
-        country: "jp",
-        postal_code: "244-0805",
-        city: "神奈川県",
-        line1: "横浜市戸塚区川上町",
-        line2: "川上団地6棟203",
-      }
-    },
-    product_id: "prod_Q2GxSqbpfzdba4",
-    price: 9999,
-  };
+  const body : Body = await req.json()
+
+  // return error if schema errors
+  const validation = bodySchema.safeParse(body)
+  if (!validation.success)
+    return NextResponse.json(validation.error.errors , {status : 400})
+
   // destructuring the body
   const { customer, product_id, price } = body;
 
