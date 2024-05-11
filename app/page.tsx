@@ -1,23 +1,32 @@
 'use client'
-import PaymentElement from "./components/CheckoutForm";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import CheckoutForm from "./components/CheckoutForm";
+
+
+// must call load stripe outside component to avoid rerender
 const stripePromise  = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
 
 export default function Home() {
-  let clientSecret = "pi_3PEvGSDSydiWZpHQ28Bg8PmP_secret_PHOZ6NFCPo4Q21SKqGCK65uUJ"
-  let paymetnIntentId = "pi_3PEvGSDSydiWZpHQ28Bg8PmP"
 
-  const options = {
+  // hard code datas for now
+  let clientSecret = "pi_3PF72RDSydiWZpHQ2HQcZO9t_secret_yEGSCaVJx5yynk3csId8YQcDo"
+  let paymentnIntentId = "pi_3PF72RDSydiWZpHQ2HQcZO9t"
+  const options   = {
+    layout :   {
+      type : 'tabs',
+      appearance : {
+        theme : "night"
+      }
+    },
     clientSecret : clientSecret,
-    paymetnIntentId : paymetnIntentId
+    paymentnIntentId : paymentnIntentId
   }
 
   return (
-  <div>
-    <main>Hello World</main>
-    <Elements stripe={stripePromise} options={options}>
+  <div className="bg-white">
+    <Elements stripe={stripePromise} options={options}   >
+      
       <CheckoutForm/>
     </Elements>
   </div>
