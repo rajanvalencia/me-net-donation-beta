@@ -39,7 +39,6 @@ const PaymentPage = ({clientSecret , paymentIntentId} : Props) => {
       </div> */}
     </div>
     <Elements stripe={stripePromise} options={{clientSecret : clientSecret }}>
-      
       <CheckoutForm/>
     </Elements>
   </div>

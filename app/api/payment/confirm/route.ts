@@ -25,7 +25,7 @@ export async function POST(req:NextRequest ) {
   // stripe api に問い合わせ, payment Intent を確定
   const {status : paymentIntentStatus} = await stripe.paymentIntents.confirm(payment_intent_id , {
     payment_method : payment_method_id,
-    return_url : "www.google.com"
+    return_url : "www.example.com"
   })
   
   // 成功　または　失敗のレスポンス

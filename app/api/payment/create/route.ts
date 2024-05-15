@@ -3,7 +3,7 @@ import Stripe from "stripe";
 import {z} from "zod"
 
 
-const addressSchema = z.object({
+ const addressSchema = z.object({
   country : z.string(),
   postal_code : z.string(),
   city : z.string(),
@@ -11,20 +11,20 @@ const addressSchema = z.object({
   line2 : z.string()
 })
 
-const customerSchema = z.object({
+ const customerSchema = z.object({
   name : z.string(),
   email : z.string().email(),
   phone : z.string().min(11).max(11),
   address : addressSchema
 })
 
-const bodySchema = z.object({
+ const bodySchema = z.object({
   customer : customerSchema,
   product_id : z.string(),
   price : z.number()
 })
 
-type Body = z.infer<typeof bodySchema>
+export type BodyCreate = z.infer<typeof bodySchema>
 
 
 
@@ -33,7 +33,7 @@ type Body = z.infer<typeof bodySchema>
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string , {apiVersion : "2024-04-10"});
 
 export async function POST(req: NextRequest) {
-  const body : Body = await req.json()
+  const body : BodyCreate = await req.json()
 
   // return error if schema errors
   const validation = bodySchema.safeParse(body)
