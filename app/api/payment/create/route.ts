@@ -18,13 +18,13 @@ import {z} from "zod"
   address : addressSchema
 })
 
- const bodySchema = z.object({
+ export const bodySchema = z.object({
   customer : customerSchema,
   product_id : z.string(),
   price : z.number()
 })
 
-export type BodyCreate = z.infer<typeof bodySchema>
+type BodyInterface = z.infer<typeof bodySchema>
 
 
 
@@ -33,7 +33,7 @@ export type BodyCreate = z.infer<typeof bodySchema>
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string , {apiVersion : "2024-04-10"});
 
 export async function POST(req: NextRequest) {
-  const body : BodyCreate = await req.json()
+  const body : BodyInterface = await req.json()
 
   // return error if schema errors
   const validation = bodySchema.safeParse(body)
