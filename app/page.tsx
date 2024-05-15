@@ -1,3 +1,4 @@
+import DonationForm from "./components/DonationForm";
 import PaymentPage from "./components/PaymentPage";
 
 export default function Home() {
@@ -5,7 +6,9 @@ export default function Home() {
   
   return (
     <div>
-      <PaymentPage clientSecret="pi_3PGejIDSydiWZpHQ0ldcVb5G_secret_Bsuq77DWNGJMtB7bWltzU2RxM"/>
+      {/* <PaymentPage clientSecret="pi_3PGejIDSydiWZpHQ0ldcVb5G_secret_Bsuq77DWNGJMtB7bWltzU2RxM"/> */}
+      <DonationForm ></DonationForm>
+      
     </div>
   );
 }
