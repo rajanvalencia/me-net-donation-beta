@@ -99,7 +99,7 @@ const DonationForm = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-white">Price</label>
+          <label className="block text-sm font-medium text-black">Price</label>
           <input type="number" className="input input-bordered w-full bg-gray-500" {...register("price", { valueAsNumber: true })} />
           {errors.price && <p className="text-red-500 text-xs mt-1">{errors.price.message}</p>}
         </div>
