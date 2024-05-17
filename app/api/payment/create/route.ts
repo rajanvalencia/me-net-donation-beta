@@ -55,7 +55,14 @@ export async function POST(req: NextRequest) {
       unit_amount: price,
     });
     // create invoice  => returns invoiceId
-    const { id: invoiceId } = await stripe.invoices.create({ customer: customerId });
+    const { id: invoiceId } = await stripe.invoices.create({
+      customer : customerId ,
+      payment_settings : {
+        // ほかいれるとなんかばぐる
+        
+        payment_method_types : ["card" ,  "link"]
+      }
+    });
 
     // create invoice item  => no any returns
     // 請求書に詳細内容を書き込む感覚
@@ -68,7 +75,7 @@ export async function POST(req: NextRequest) {
     // create an payment intent 
     const { payment_intent: paymentIntentId } = await stripe.invoices.finalizeInvoice(invoiceId);
 
-    // get client secret from payment intent
+    // retrive client secret from payment intent
     if (typeof paymentIntentId === "string") {
       const { client_secret } = await stripe.paymentIntents.retrieve(paymentIntentId);
       response = { client_secret, paymentIntentId };
