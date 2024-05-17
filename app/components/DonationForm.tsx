@@ -39,10 +39,12 @@ const DonationForm = () => {
     }
   };
 
-  // next create logic after the response is got(i.e clientsecret an paymentIntentId)
+  // next create logic after the response is got(i.e clientsecret and paymentIntentId)
 
   return (
     <div className=" mx-auto mt-10 p-5 bg-white shadow-black rounded-lg">
+      {/* dont render form after submitted */}
+      {!submitResponse && 
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-600">Name</label>
@@ -107,6 +109,7 @@ const DonationForm = () => {
         <button type="submit" className="btn btn-primary w-full bg-blue-500 border-none hover:bg-blue-600">Submit</button>
       </form>
 
+      }
       <div>
         {submitResponse && <div>
           <PaymentPage  clientSecret={submitResponse.client_secret} paymentIntentId={submitResponse.paymentIntentId}/>
