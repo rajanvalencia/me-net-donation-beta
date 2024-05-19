@@ -13,7 +13,8 @@ export async function GET(req: NextRequest) {
   const products = filteredProducts.map((product) => ({
     id: product.id,
     name: product.name,
-    image : product.images
+    image : product.images,
+    price : product.default_price
   }));
 
   return NextResponse.json( products , {status : 200} );
