@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import {z} from "zod"
 
-
+// trying out pay-what-you-want method
  const addressSchema = z.object({
   country : z.string(),
   postal_code : z.string(),
@@ -50,7 +50,6 @@ export async function POST(req: NextRequest) {
 
     const {default_price} = await stripe.products.retrieve(product_id)
 
-    stripe.prices.update(default_price , )
     
     
 
