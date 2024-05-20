@@ -1,14 +1,21 @@
-import DonationForm from "./components/DonationForm";
-import PaymentPage from "./components/PaymentPage";
+'use client'
+import React, { useState } from 'react';
+import DonationForm from './components/DonationForm';
+import ProductList from './components/ProductList';
 
 export default function Home() {
+  const [selectedProduct, setSelectedProduct] = useState<string>('');
 
-  
+  const handleProductSelect = (productId: string) => {
+    setSelectedProduct(productId);
+  };
+
   return (
     <div>
-      {/* <PaymentPage clientSecret="pi_3PGejIDSydiWZpHQ0ldcVb5G_secret_Bsuq77DWNGJMtB7bWltzU2RxM"/> */}
-      <DonationForm ></DonationForm>
-      
+      <ProductList onProductSelect={handleProductSelect} />
+      {selectedProduct && (
+        <DonationForm productId={selectedProduct} />
+      )}
     </div>
   );
 }
