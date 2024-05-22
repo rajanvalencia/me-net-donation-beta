@@ -20,6 +20,7 @@ interface SubmitResponse {
 
 const DonationForm = ({productId} : Props) => {
   
+  console.log(productId)
 
   const [submitResponse , setSubmitResponse] = useState<SubmitResponse>()
   const {
@@ -31,6 +32,7 @@ const DonationForm = ({productId} : Props) => {
 
 
   const onSubmit = async (formData: FormData) => {
+    console.log("here are the form data",formData)
     // Include ProdutTd passed from the prop
     const response = await fetch("/api/payment/create", {
       method: "POST",

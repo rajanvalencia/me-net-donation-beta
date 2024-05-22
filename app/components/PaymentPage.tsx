@@ -1,8 +1,9 @@
 "use client";
 import React from "react";
 import { loadStripe } from "@stripe/stripe-js";
-import { Elements } from "@stripe/react-stripe-js";
+import { CustomCheckoutProvider, Elements } from "@stripe/react-stripe-js";
 import CheckoutForm from "./CheckoutForm";
+import CustomCheckoutForm from "./CustomCheckoutForm";
 
 interface Props {
   clientSecret : string
@@ -30,14 +31,14 @@ const PaymentPage = ({clientSecret , paymentIntentId} : Props) => {
 
   return (
     <div className="bg-white">
-    <div>
+    {/* <div>
       <p>custom checkout provider</p>
-      {/* <div>
+      <div>
         <CustomCheckoutProvider stripe={stripePromise} options={options}>
           <CustomCheckoutForm/>
         </CustomCheckoutProvider>
-      </div> */}
-    </div>
+      </div>
+    </div> */}
     <Elements stripe={stripePromise} options={{clientSecret : clientSecret }}>
       <CheckoutForm/>
     </Elements>
