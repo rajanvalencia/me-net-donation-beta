@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
       payment_settings : {
         // ほかいれるとなんかばぐる
         
-        payment_method_types : ["card" ,  "link"]
+        payment_method_types : ["card" ,  "link" ]
       }
     });
 
