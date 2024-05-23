@@ -19,27 +19,20 @@ const PaymentPage = ({clientSecret , paymentIntentId} : Props) => {
   //   "pi_3PF72RDSydiWZpHQ2HQcZO9t_secret_yEGSCaVJx5yynk3csId8YQcDo";
   // let paymentnIntentId = "pi_3PF72RDSydiWZpHQ2HQcZO9t";
   const options = {
-    layout: {
-      type: "tabs",
-      appearance: {
-        theme: "night",
-      },
-    },
     clientSecret: clientSecret,
-    paymentnIntentId: paymentIntentId,
   };
 
   return (
     <div className="bg-white">
-    {/* <div>
-      <p>custom checkout provider</p>
+    <div>
+      {/* <p>custom checkout provider</p>
       <div>
         <CustomCheckoutProvider stripe={stripePromise} options={options}>
           <CustomCheckoutForm/>
         </CustomCheckoutProvider>
-      </div>
-    </div> */}
-    <Elements stripe={stripePromise} options={{clientSecret : clientSecret }}>
+      </div> */}
+    </div>
+    <Elements stripe={stripePromise} options={options}>
       <CheckoutForm/>
     </Elements>
   </div>
