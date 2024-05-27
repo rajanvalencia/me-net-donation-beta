@@ -1,4 +1,4 @@
-import {stripe} from "@/app/api/v1/checkout-sessions/test/route"
+import { stripe } from "@/app/utils/stripe"
 
 async function getSession(sessionId:string) {
   const session = await stripe.checkout.sessions.retrieve(sessionId!)

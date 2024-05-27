@@ -3,22 +3,23 @@ import React, { useCallback, useRef, useState } from 'react'
 import { loadStripe } from '@stripe/stripe-js'
 import { EmbeddedCheckoutProvider , EmbeddedCheckout } from '@stripe/react-stripe-js'
 
-const EmbededCheckout = () => {
+const EmbededCheckoutButton = () => {
   const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
 
+  const [clientSecret , setClientSecret] = useState("")
   const [showCheckout , setShowCheckout] = useState(false)
   const modalRef = useRef<HTMLDialogElement>(null)
 
-  const fetchClientSecret = useCallback(() => {
-    return fetch("/api/v1/ceckout-session/test",{
-      method : "POST",
-      headers : {
-        "Content-Type" : "application/json"
+  const fetchClientSecret = useCallback(async () => {
+    return fetch("/api/embedded-checkout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
       },
-      body : JSON.stringify({priceId : "price_1PIkK0DSydiWZpHQ3m8cDSM1"})
+      body: JSON.stringify({ priceId: "price_1PL1ysDSydiWZpHQLs6dl1z3" })
     })
-      .then((res) => res.json())
-      .then((data) => data.client_secret)
+    .then((res) => res.json())
+    .then((data) => data.client_secret) 
   },[]);
 
   const options = {fetchClientSecret}
@@ -34,8 +35,8 @@ const EmbededCheckout = () => {
   }
 
   return (
-    <div id='checkout'>
-      <button onClick={handleCheckoutClick}>open modal with embedded checkout</button>
+    <div id='checkout' className='flex-auto'>
+      <button className='btn' onClick={handleCheckoutClick}>open modal with embedded checkout</button>
       <dialog ref={modalRef}>
         <div>
           <h3>embeded checkout </h3>
@@ -48,7 +49,7 @@ const EmbededCheckout = () => {
           </div>
           <div>
             <form method='dialog'>
-              <button onClick={handleCloseModal}>close</button>
+              <button className='btn' onClick={handleCloseModal}>close</button>
             </form>
           </div>
         </div>
@@ -58,4 +59,4 @@ const EmbededCheckout = () => {
   )
 }
 
-export default EmbededCheckout
+export default EmbededCheckoutButton
