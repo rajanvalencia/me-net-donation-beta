@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { bodySchema } from "../api/payment/create/route";
+import { bodySchema } from "../api/v1/checkout-sessions/create/route";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";

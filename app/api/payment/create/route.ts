@@ -18,7 +18,7 @@ import {z} from "zod"
   address : addressSchema
 })
 
- export const bodySchema = z.object({
+   const bodySchema = z.object({
   customer : customerSchema,
   product_id : z.string(),
   price : z.number()
@@ -78,7 +78,7 @@ export async function POST(req: NextRequest) {
     // retrive client secret from payment intent
     if (typeof paymentIntentId === "string") {
       const { client_secret } = await stripe.paymentIntents.retrieve(paymentIntentId);
-      response = { client_secret, paymentIntentId };
+      response =  { client_secret, paymentIntentId };
     } else {
       console.error('PaymentIntentId is not available or not a string.');
     }
