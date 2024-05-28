@@ -49,22 +49,20 @@ export async function POST(req: NextRequest , res : NextResponse) {
   });
 
 
-  const sess  = await stripe.checkout.sessions.create({
+  const session  = await stripe.checkout.sessions.create({
     ui_mode : "embedded",
-    payment_method_types : ["card" ],
+    payment_method_types : ["card" , "konbini" ],
     line_items : [
-      {price : priceId },
+      {
+        price : priceId,
+        quantity : 1
+      }
 
     ],
     mode : "payment",
-    return_url : `${req.headers.get('origin')}/return?session_id={CHECKOUT_SESSION_ID}`
-    
-    
+    return_url : `${req.headers.get('origin')}/return?session_id={CHECKOUT_SESSION_ID}`,
+    automatic_tax : {enabled : false}
   })
-
-  // if (success_url)
-
-  
-  return NextResponse.json({id : sess.id , client_secret : sess.client_secret ,})
+  return NextResponse.json({id : session.id , client_secret : session.client_secret});
 
 }
