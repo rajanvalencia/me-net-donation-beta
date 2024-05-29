@@ -6,7 +6,6 @@ import { EmbeddedCheckoutProvider , EmbeddedCheckout } from '@stripe/react-strip
 const EmbededCheckoutButton = () => {
   const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
 
-  const [clientSecret , setClientSecret] = useState("")
   const [showCheckout , setShowCheckout] = useState(false)
   const modalRef = useRef<HTMLDialogElement>(null)
 
