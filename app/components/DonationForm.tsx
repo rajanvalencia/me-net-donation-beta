@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { bodySchema } from "../api/v1/checkout-sessions/create/route";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -27,6 +27,7 @@ const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
 );
 const DonationForm = ({ productId }: Props) => {
+  // TODO: do smth better than any
   const [checkoutOptions, setcheckoutOptions] = useState<any>();
   const modalRef = useRef<HTMLDialogElement>(null);
 
@@ -52,14 +53,14 @@ const DonationForm = ({ productId }: Props) => {
 
 
   // wrap this in use callback
-  const onSubmit = async (formData: FormData) => {
+  const onSubmit = useCallback( (formData: FormData) => {
     console.log("here are the form data", formData);
     // returns client_secret
     const options = createPayment(formData)
     setcheckoutOptions(options) 
-    modalRef.current?.showModal();
+    // modalRef.current?.showModal();
     console.log()
-  };
+  },[createPayment]);
 
   return (
     <div className=" mx-auto mt-10 p-5 bg-white shadow-black rounded-lg">
