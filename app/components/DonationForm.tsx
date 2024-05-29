@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { bodySchema } from "../api/v1/checkout-sessions/create/route";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,6 +7,11 @@ import { z } from "zod";
 import PaymentPage from "./PaymentPage";
 import { useMutation } from "@tanstack/react-query";
 import { createPayment } from "../api-client/payments";
+import {
+  EmbeddedCheckout,
+  EmbeddedCheckoutProvider,
+} from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 
 interface Props {
   productId: string;
@@ -18,8 +23,13 @@ interface SubmitResponse {
   paymentIntentId: string;
 }
 
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
+);
 const DonationForm = ({ productId }: Props) => {
-  console.log(productId);
+  const [checkoutOptions, setcheckoutOptions] = useState<any>();
+  const modalRef = useRef<HTMLDialogElement>(null);
+
   const {
     register,
     handleSubmit,
@@ -40,13 +50,24 @@ const DonationForm = ({ productId }: Props) => {
     onError: (error) => console.log(error),
   });
 
+
+  // wrap this in use callback
   const onSubmit = async (formData: FormData) => {
     console.log("here are the form data", formData);
-    createPaymentApi(formData);
+    // returns client_secret
+    const options = createPayment(formData)
+    setcheckoutOptions(options) 
+    modalRef.current?.showModal();
+    console.log()
   };
 
   return (
     <div className=" mx-auto mt-10 p-5 bg-white shadow-black rounded-lg">
+      {checkoutOptions && (
+        <EmbeddedCheckoutProvider stripe={stripePromise} options={checkoutOptions}>
+          <EmbeddedCheckout />
+        </EmbeddedCheckoutProvider>
+      )}
       {/* react mutation が　行われてないとき（api叩いてないとき）*/}
       {isIdle && (
         <form onSubmit={handleSubmit(onSubmit)}>
