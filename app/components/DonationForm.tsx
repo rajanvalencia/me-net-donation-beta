@@ -1,57 +1,90 @@
 "use client";
-import React, { useState } from "react";
+import React, { useRef, useState, useCallback } from "react";
 import { bodySchema } from "../api/v1/checkout-sessions/create/route";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import PaymentPage from "./PaymentPage";
-import { useMutation } from "@tanstack/react-query";
-import { createPayment } from "../api-client/payments";
+import {
+  EmbeddedCheckout,
+  EmbeddedCheckoutProvider,
+} from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { createCheckoutSession } from "../api-client/payments";
 
 interface Props {
   productId: string;
 }
 
-type FormData = z.infer<typeof bodySchema>;
-interface SubmitResponse {
-  client_secret: string;
-  paymentIntentId: string;
-}
+export type FormData = z.infer<typeof bodySchema>;
 
 const DonationForm = ({ productId }: Props) => {
-  console.log(productId);
+  const stripePromise = loadStripe(
+    process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
+  );
+
+
+  const modalRef = useRef<HTMLDialogElement>(null);
+
+
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
-  } = useForm<FormData>({ resolver: zodResolver(bodySchema) });
+  } = useForm<FormData>({
+    defaultValues: {
+      customer: {
+        address: {
+          city: "yokohama",
+          country: "JP",
+          line1: "testline 1",
+          line2: "testline2",
+          postal_code: "2334213",
+        },
+        email: "koiralabishwas0816@gmail.com",
+        name: "Bishwas Koirla",
+        phone: "08035118306",
+      },
+      price: 9999,
+      product_id: "prod_Q2GxSqbpfzdba4",
+    },
+    resolver: zodResolver(bodySchema),
+  });
 
-  // POST mutation
+  // react query logics
   const {
-    mutate: createPaymentApi,
-    data: createdPaymentData,
+    mutate: checkoutSession,
+    data: client_secret,
     isSuccess,
     isIdle,
     isPending,
   } = useMutation({
-    mutationFn: createPayment,
+    mutationFn: createCheckoutSession,
     onSuccess: (data) => console.log(data),
     onError: (error) => console.log(error),
   });
 
-  const onSubmit = async (formData: FormData) => {
-    console.log("here are the form data", formData);
-    createPaymentApi(formData);
-  };
+  //
+  const onSubmit = useCallback(
+    async (formData: FormData) => {
+      console.log("here are the form data", formData);
+      try {
+        const clientSecret = await checkoutSession(formData);
+        modalRef.current?.showModal();
+      } catch (error) {
+        console.error("Error fetching client secret:", error);
+      } finally {
+        console.log(client_secret);
+      }
+    },
+    [checkoutSession]
+  );
 
   return (
-    <div className=" mx-auto mt-10 p-5 bg-white shadow-black rounded-lg">
-      {/* react mutation が　行われてないとき（api叩いてないとき）*/}
+    <div className="mx-auto mt-10 p-5 bg-white shadow-black rounded-lg flex-auto">
       {isIdle && (
         <form onSubmit={handleSubmit(onSubmit)}>
           {errors.product_id?.message}
-          {/* passing prop of productId */}
           <input type="hidden" {...register("product_id")} value={productId} />
 
           <div className="mb-4">
@@ -69,6 +102,7 @@ const DonationForm = ({ productId }: Props) => {
               </p>
             )}
           </div>
+
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-600">
               Name
@@ -197,33 +231,29 @@ const DonationForm = ({ productId }: Props) => {
             )}
           </div>
 
-          {/* <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-600">Product ID</label>
-          <input type="text" className="input input-bordered w-full bg-gray-100" {...register("product_id")} />
-          {errors.product_id && <p className="text-red-500 text-xs mt-1">{errors.product_id.message}</p>}
-        </div> */}
-
           <button
             type="submit"
             className="btn btn-primary w-full bg-blue-500 border-none hover:bg-blue-600"
+            disabled={isPending}
           >
-            Submit
+            {isPending ? "Processing..." : "Submit"}
           </button>
         </form>
       )}
       <div>
-        {/* mutation が issuccess した場合 */}
         {isPending && (
           <span className="loading loading-dots loading-lg text-black" />
         )}
-        {isSuccess && (
-          <div>
-            <PaymentPage
-              clientSecret={createdPaymentData.client_secret}
-              paymentIntentId={createdPaymentData.paymentIntentId}
-            />
-          </div>
-        )}
+        <div className="flex-auto">
+          {isSuccess && (
+            <EmbeddedCheckoutProvider
+              stripe={stripePromise}
+              options={{ clientSecret: client_secret }}
+            >
+              <EmbeddedCheckout />
+            </EmbeddedCheckoutProvider>
+          )}
+        </div>
       </div>
     </div>
   );
