@@ -14,7 +14,7 @@ interface Props {
   productId: string;
 }
 
-type FormData = z.infer<typeof bodySchema>;
+export type FormData = z.infer<typeof bodySchema>;
 
 
 const DonationForm = ({ productId }: Props) => {
