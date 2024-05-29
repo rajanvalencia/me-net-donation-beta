@@ -5,23 +5,26 @@ import ProductList from './components/ProductList';
 import EmbededCheckoutButton from './components/EmbededCheckoutButton';
 
 export default function Home() {
-  // const [selectedProduct, setSelectedProduct] = useState<string>('');
+  const [selectedProduct, setSelectedProduct] = useState<string>('');
 
-  // const handleProductSelect = (productId: string) => {
-  //   setSelectedProduct(productId);
-  // };
+  const handleProductSelect = (productId: string) => {
+    setSelectedProduct(productId);
+  };
 
   return (
-    // <div>
-    //   <ProductList onProductSelect={handleProductSelect} />
-    //   {selectedProduct && (
-    //     <DonationForm productId={selectedProduct} />
-    //   )}
-    // </div>
+    <div>
+
+    <div>
+      <ProductList onProductSelect={handleProductSelect} />
+      {selectedProduct && (
+        <DonationForm productId={selectedProduct} />
+      )}
+    </div>
 
 
     <div>
       <EmbededCheckoutButton/>
+    </div>
     </div>
   );
 }

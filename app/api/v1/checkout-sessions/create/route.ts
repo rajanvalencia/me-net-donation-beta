@@ -51,6 +51,9 @@ export async function POST(req: NextRequest , res : NextResponse) {
 
   const session  = await stripe.checkout.sessions.create({
     ui_mode : "embedded",
+    customer : customerId,
+    // TODO: customer のemail をretriveに帰るべき
+    customer_email : customer.email,
     payment_method_types : ["card" , "konbini" ],
     line_items : [
       {
@@ -59,9 +62,11 @@ export async function POST(req: NextRequest , res : NextResponse) {
       }
 
     ],
+    automatic_tax : {enabled : false},
     mode : "payment",
+    cancel_url : "www.cancel.com",
     return_url : `${req.headers.get('origin')}/return?session_id={CHECKOUT_SESSION_ID}`,
-    automatic_tax : {enabled : false}
+    success_url : "www.success.com"
   })
   return NextResponse.json({id : session.id , client_secret : session.client_secret});
 
