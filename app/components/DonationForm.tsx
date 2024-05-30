@@ -67,7 +67,7 @@ const DonationForm = ({ productId }: Props) => {
   //
   const onSubmit = useCallback(
     async (formData: FormData) => {
-      console.log("here are the form data", formData);
+      console.log("submitted data", formData);
       try {
         const clientSecret = await checkoutSession(formData);
         modalRef.current?.showModal();
