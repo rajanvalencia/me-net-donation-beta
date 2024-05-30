@@ -63,7 +63,7 @@ export async function POST(req: NextRequest , res : NextResponse) {
     ],
     automatic_tax : {enabled : false},
     mode : "payment",
-    return_url : `${req.headers.get('origin')}/return?session_id={CHECKOUT_SESSION_ID}`,
+    return_url : `${req.headers.get('origin')}/donationReturn?session_id={CHECKOUT_SESSION_ID}`,
   })
   return NextResponse.json({id : session.id , client_secret : session.client_secret});
 

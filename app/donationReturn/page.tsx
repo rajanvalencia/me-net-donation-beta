@@ -1,11 +1,12 @@
 import {stripe} from "@/app/utils/stripe"
+import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 
 async function getSession(sessionId:string) {
   const session = await stripe.checkout.sessions.retrieve(sessionId)
   return session
 }
 
-export default async function checkoutReturn({searchParams} : any) {
+export default async function checkoutReturn({searchParams} : Params) {
   const sessionId = searchParams.session_id;
   const session = await getSession(sessionId)
 
