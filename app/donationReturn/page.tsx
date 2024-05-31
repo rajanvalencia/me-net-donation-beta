@@ -9,6 +9,7 @@ async function getSession(sessionId:string) {
 export default async function checkoutReturn({searchParams} : Params) {
   const sessionId = searchParams.session_id;
   const session = await getSession(sessionId)
+  console.log(session)
 
   if (session?.status === "open") {
     return <p className="alert text-red-500">Payent Failder</p>
