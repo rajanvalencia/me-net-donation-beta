@@ -9,7 +9,11 @@ interface Props {
 export function Email({url} : Props) {
   return (
     <Html lang="en">
-      <Button href={url}>Click me</Button>
+      <body>
+        hello world <br />
+        testing the mail
+      </body>
+      <Button href={url}>Just rendering exmple.com Click me</Button>
     </Html>
   );
 }
