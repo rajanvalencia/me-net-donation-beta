@@ -14,7 +14,7 @@ export default function Home() {
   return (
 
 
-    <div>
+  
 
     <div>
       <ProductList onProductSelect={handleProductSelect} />
@@ -22,9 +22,7 @@ export default function Home() {
         <DonationForm productId={selectedProduct} />
       )}
     </div>
-    <div>
-      <EmbededCheckoutButton/>
-    </div>
-    </div>
+
+  
   );
 }
