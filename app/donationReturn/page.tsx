@@ -12,7 +12,7 @@ export default async function checkoutReturn({searchParams} : Params) {
   console.log(session)
 
   if (session?.status === "open") {
-    return <p className="alert text-red-500">Payent Failder</p>
+    return <p className="alert text-red-500">Payment Failder</p>
   }
 
   if (session?.status === "complete")

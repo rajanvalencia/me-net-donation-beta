@@ -3,7 +3,6 @@ import React from "react";
 import { loadStripe, StripeElementsOptions } from "@stripe/stripe-js";
 import { CustomCheckoutProvider, Elements } from "@stripe/react-stripe-js";
 import CheckoutForm from "./CheckoutForm";
-import CustomCheckoutForm from "./CustomCheckoutForm";
 
 interface Props {
   clientSecret : string
