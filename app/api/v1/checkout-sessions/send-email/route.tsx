@@ -7,7 +7,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
 const schema = z.object({
-  email : z.string().email(),
+  send_to : z.string().email(),
   subject : z.string()
 
 })
@@ -32,8 +32,8 @@ export  async function POST(req: NextRequest, res: NextResponse) {
   const emailHtml = render(<Email url="https://example.com" />);
 
   const options = {
-    from: body.email,
-    to: 'koiralabishwas0816@gmail.com',
+    from: "koiralabishwas0816@gmail.com",
+    to: body.send_to,
     subject: body.subject,
     html: emailHtml,
   };
