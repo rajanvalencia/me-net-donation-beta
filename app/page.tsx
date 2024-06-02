@@ -2,8 +2,6 @@
 import React, { useState } from 'react';
 import DonationForm from './components/DonationForm';
 import ProductList from './components/ProductList';
-import EmbededCheckoutButton from './components/EmbededCheckoutButton';
-
 export default function Home() {
   const [selectedProduct, setSelectedProduct] = useState<string>('');
 
@@ -12,9 +10,6 @@ export default function Home() {
   };
 
   return (
-
-
-  
 
     <div>
       <ProductList onProductSelect={handleProductSelect} />
