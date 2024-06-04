@@ -1,4 +1,3 @@
-// pages/api/send-email.ts
 import type { NextApiRequest, NextApiResponse } from 'next';
 import nodemailer from 'nodemailer';
 import { render } from '@react-email/render';
