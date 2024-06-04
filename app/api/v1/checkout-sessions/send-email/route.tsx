@@ -8,7 +8,8 @@ import { z } from 'zod';
 
 const schema = z.object({
   send_to : z.string().email(),
-  subject : z.string()
+  subject : z.string(),
+  message : z.string()
 
 })
 
@@ -29,7 +30,7 @@ export  async function POST(req: NextRequest, res: NextResponse) {
   });
 
   // なんすんだこれ
-  const emailHtml = render(<Email url="https://example.com" />);
+  const emailHtml = render(<Email message={body.message} />);
 
   const options = {
     from: "koiralabishwas0816@gmail.com",

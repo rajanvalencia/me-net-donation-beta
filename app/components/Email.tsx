@@ -3,17 +3,15 @@ import * as React from 'react';
 import { Html, Button } from '@react-email/components';
 
 interface Props {
-  url : string
+  message : string
 }
 
-export function Email({url} : Props) {
+export function Email({message} : Props) {
   return (
-    <Html lang="en">
+    <Html lang="jp">
       <body>
-        hello world <br />
-        testing the mail
+        {message}
       </body>
-      <Button href={url}>Just rendering exmple.com Click me</Button>
     </Html>
   );
 }
