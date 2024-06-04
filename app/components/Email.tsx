@@ -1,12 +1,11 @@
-// email.tsx
 import * as React from 'react';
-import { Html, Button } from '@react-email/components';
+import { Html } from '@react-email/components';
 
 interface Props {
-  message : string
+  message: string;
 }
 
-export function Email({message} : Props) {
+export function Email({ message }: Props) {
   return (
     <Html lang="jp">
       <body>
@@ -15,4 +14,3 @@ export function Email({message} : Props) {
     </Html>
   );
 }
-
