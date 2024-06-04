@@ -15,3 +15,4 @@ export function Email({message} : Props) {
     </Html>
   );
 }
+
