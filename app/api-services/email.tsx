@@ -2,14 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import nodemailer from 'nodemailer';
 import { render } from '@react-email/render';
 import { Email } from '@/app/components/Email';
-import { NextRequest, NextResponse } from 'next/server';
-import { z } from 'zod';
-
-const schema = z.object({
-  send_to : z.string().email(),
-  subject : z.string(),
-  message : z.string()
-})
+import {  NextResponse } from 'next/server';
 
 type Props = {
   recipient: string;
@@ -44,3 +37,4 @@ export async function sendSuccesEmail({ recipient, subject, message }: Props) {
 
 
 // TODO: sendErrorEmail
+// error credit番号でたたいて それで確認する、

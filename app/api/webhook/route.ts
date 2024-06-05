@@ -7,18 +7,15 @@ import Stripe from "stripe";
 /**
  * checkout.session.complete用のWebhook
  */
-type CheckoutSessionWebhookReq = NextRequest & {
-  body: Stripe.Checkout.Session;
-};
-
-export async function POST(request: CheckoutSessionWebhookReq) {
+export async function POST(request: NextRequest) {
   try {
-    const req = await request.json()
+    const req = await request.json() as Stripe.Checkout.Session;
 
     const { customer_details } = req;
 
-    if(!customer_details?.email)
+    if(!customer_details?.email || customer_details?.email.length === 0) {
       return NextResponse.json({ status: 400, error: "Bad Request. Email not found" });
+    }
 
     sendSuccesEmail({
       recipient: customer_details?.email,
