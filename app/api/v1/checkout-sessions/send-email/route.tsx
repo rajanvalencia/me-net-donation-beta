@@ -20,6 +20,7 @@ export  async function POST(req: NextRequest, res: NextResponse) {
 
   const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
+    // mail は　465 ポートによって受信される。
     port: 465,
     secure: true,
     auth: {

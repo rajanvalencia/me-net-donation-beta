@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
         if (customerEmail) {
           const mailRes = await fetch(
             // req.headersのおりじんにできないかな
-            `http://localhost:3000/api/v1/checkout-sessions/send-email`,
+            `${req.headers.get('origin')}/api/v1/checkout-sessions/send-email`,
             {
               method: "POST",
               headers: { "Content-Type": "application/json" },
