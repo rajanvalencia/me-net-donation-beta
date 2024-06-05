@@ -12,12 +12,12 @@ type Props = {
 
 export async function sendSuccesEmail({ recipient, subject, message }: Props) {
   const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
+    host: "sv12251.xserver.jp",
     port: 465, // メール送信用の固定ポート番号
     secure: true,
     auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
+      user: process.env.EMAIL_USERNAME,
+      pass: process.env.EMAIL_PASSWORD,
     },
     tls: {
       rejectUnauthorized: false,
@@ -38,7 +38,7 @@ export async function sendSuccesEmail({ recipient, subject, message }: Props) {
   });
 
   const options = {
-    from: "koiralabishwas0816@gmail.com",
+    from: "info@me-net.or.jp",
     to: "rajan.valencia@au.com",
     subject: `[${process.env.ENV}] ${subject}`,
     html: render(<Email message={message} />),
