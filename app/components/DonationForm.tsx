@@ -1,6 +1,6 @@
 "use client";
 import React, { useRef, useState, useCallback } from "react";
-import { bodySchema } from "../api/v1/checkout-sessions/create/route";
+import { bodySchema } from "../schemas/checkout-session";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -69,7 +69,7 @@ const DonationForm = ({ productId }: Props) => {
     async (formData: FormData) => {
       console.log("submitted data", formData);
       try {
-        const clientSecret = await checkoutSession(formData);
+        await checkoutSession(formData);
         modalRef.current?.showModal();
       } catch (error) {
         console.error("Error fetching client secret:", error);
@@ -77,7 +77,7 @@ const DonationForm = ({ productId }: Props) => {
         console.log(client_secret);
       }
     },
-    [checkoutSession]
+    [checkoutSession , client_secret]
   );
 
   return (

@@ -25,6 +25,7 @@ export async function POST(req: NextRequest) {
 
         if (customerEmail) {
           const mailRes = await fetch(
+            // req.headersのおりじんにできないかな
             `http://localhost:3000/api/v1/checkout-sessions/send-email`,
             {
               method: "POST",
@@ -39,13 +40,14 @@ export async function POST(req: NextRequest) {
           );
 
           const mailData = await mailRes.json();
+          console.log(event.type)
           return NextResponse.json({ status: 200, data: mailData });
         }
         break;
 
       // Handle other event types
       default:
-        console.log(`Unhandled event type ${event.type}`);
+        // console.log(`Unhandled event type ${event.type}`);
     }
 
     return NextResponse.json({ status: 200, message: 'Webhook processed successfully' });
