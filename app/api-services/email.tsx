@@ -1,17 +1,17 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import nodemailer from 'nodemailer';
-import { render } from '@react-email/render';
-import { Email } from '@/app/components/Email';
-import {  NextResponse } from 'next/server';
+import type { NextApiRequest, NextApiResponse } from "next";
+import nodemailer from "nodemailer";
+import { render } from "@react-email/render";
+import { Email } from "@/app/components/Email";
+import { NextResponse } from "next/server";
 
 type Props = {
   recipient: string;
   subject: string;
   message: string;
-}
+};
 
 const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
+  host: "smtp.gmail.com",
   port: 465, // メール送信用の固定ポート番号
   secure: true,
   auth: {
@@ -20,21 +20,30 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export async function sendSuccesEmail({ recipient, subject, message }: Props) {  
+export async function sendSuccesEmail({ recipient, subject, message }: Props) {
   const options = {
     from: "koiralabishwas0816@gmail.com",
     to: "rajan.valencia@au.com",
     subject: `[${process.env.ENV}] ${subject}`,
-    html: render(<Email message={message}/>),
+    html: render(<Email message={message} />),
   };
 
   try {
-    await transporter.sendMail(options);
+    await new Promise((resolve, reject) => {
+      transporter.sendMail(options, (err, info) => {
+        if (err) {
+          console.error(err);
+          reject(err);
+        } else {
+          console.log(info);
+          resolve(info);
+        }
+      });
+    });
   } catch (error) {
-    return NextResponse.json({ message: 'Failed to send email', error });
+    return NextResponse.json({ message: "Failed to send email", error });
   }
 }
-
 
 // TODO: sendErrorEmail
 // error credit番号でたたいて それで確認する、
