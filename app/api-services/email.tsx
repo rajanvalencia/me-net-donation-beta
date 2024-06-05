@@ -19,6 +19,9 @@ export async function sendSuccesEmail({ recipient, subject, message }: Props) {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS,
     },
+    tls: {
+      rejectUnauthorized: false,
+    },
   });
 
   await new Promise((resolve, reject) => {
@@ -41,21 +44,15 @@ export async function sendSuccesEmail({ recipient, subject, message }: Props) {
     html: render(<Email message={message} />),
   };
 
-  try {
-    await new Promise((resolve, reject) => {
-      transporter.sendMail(options, (err, info) => {
-        if (err) {
-          console.error(err);
-          reject(err);
-        } else {
-          console.log(info);
-          resolve(info);
-        }
-      });
+  return await new Promise((resolve, reject) => {
+    transporter.sendMail(options, (err, info) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(info);
+      }
     });
-  } catch (error) {
-    return NextResponse.json({ message: "Failed to send email", error });
-  }
+  });
 }
 
 // TODO: sendErrorEmail
