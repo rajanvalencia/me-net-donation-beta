@@ -18,9 +18,9 @@ export async function POST(req: NextRequest) {
     );
 
     switch (event.type) {
-      case "checkout.session.async_payment_succeeded":
-        const checkoutSessionAsyncPaymentSucceeded = event.data.object;
-        const { customer_details } = checkoutSessionAsyncPaymentSucceeded;
+      case "checkout.session.completed":
+        const checkoutSessionCompleted = event.data.object;
+        const { customer_details } = checkoutSessionCompleted;
         const customerEmail = customer_details?.email;
 
         if (customerEmail) {
