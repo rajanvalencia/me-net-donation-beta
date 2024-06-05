@@ -21,7 +21,7 @@ const transporter = nodemailer.createTransport({
 
 export async function sendSuccesEmail({ recipient, subject, message }: Props) {
   const options = {
-    from: "info@me-net.or.jp",
+    from: "koiralabishwas0816@gmail.com",
     to: recipient,
     subject: `[${process.env.ENV}] ${subject}`,
     html: render(<Email message={message} />),
