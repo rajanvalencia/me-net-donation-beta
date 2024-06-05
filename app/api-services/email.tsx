@@ -22,7 +22,7 @@ export async function sendSuccesEmail({ recipient, subject, message }: Props) {
 
   const options = {
     from: "info@me-net.or.jp",
-    to: "rajan.valencia@au.com",
+    to: recipient,
     subject: `[${process.env.ENV}] ${subject}`,
     html: render(<Email message={message} />),
   };
