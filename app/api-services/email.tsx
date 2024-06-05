@@ -27,19 +27,7 @@ export async function sendSuccesEmail({ recipient, subject, message }: Props) {
     html: render(<Email message={message} />),
   };
 
-  try {
-    await transporter.sendMail(options);
-    return NextResponse.json({
-      status: 200,
-      message: "Email sent successfully",
-    });
-  } catch (error) {
-    console.error("Error sending email: ", error);
-    return NextResponse.json({
-      status: 500,
-      message: "Email error",
-    });
-  }
+  return await transporter.sendMail(options);
 }
 
 // TODO: sendErrorEmail
