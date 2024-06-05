@@ -10,17 +10,30 @@ type Props = {
   message: string;
 };
 
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465, // メール送信用の固定ポート番号
-  secure: true,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
-
 export async function sendSuccesEmail({ recipient, subject, message }: Props) {
+  const transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 465, // メール送信用の固定ポート番号
+    secure: true,
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
+
+  await new Promise((resolve, reject) => {
+    // verify connection configuration
+    transporter.verify(function (error, success) {
+      if (error) {
+        console.log(error);
+        reject(error);
+      } else {
+        console.log("Server is ready to take our messages");
+        resolve(success);
+      }
+    });
+  });
+
   const options = {
     from: "koiralabishwas0816@gmail.com",
     to: "rajan.valencia@au.com",
