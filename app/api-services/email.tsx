@@ -24,7 +24,7 @@ export async function sendSuccesEmail({ recipient, subject, message }: Props) {
   const options = {
     from: "koiralabishwas0816@gmail.com",
     to: recipient,
-    subject: subject,
+    subject: `[${process.env.ENV}] ${subject}`,
     html: render(<Email message={message}/>),
   };
 
